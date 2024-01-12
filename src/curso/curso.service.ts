@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
 
 @Injectable()
 export class CursoService {
+  private readonly logger = new Logger(CursoService.name)
   create(createCursoDto: CreateCursoDto) {
     return 'This action adds a new curso';
   }

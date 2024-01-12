@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger } from '@nestjs/common';
 import { AulaService } from './aula.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 
 @Controller('aula')
 export class AulaController {
+  private readonly logger = new Logger(AulaController.name)
   constructor(private readonly aulaService: AulaService) {}
 
   @Post()

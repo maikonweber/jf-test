@@ -13,8 +13,8 @@ export class ProfessorController {
     return this.professorService.create(createProfessorDto);
   }
 
-  @Get()
-  findAll() {
+  @Post()
+  createCurso() {
     return this.professorService.findAll();
   }
 

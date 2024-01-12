@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 
 @Injectable()
 export class AulaService {
+  private readonly logger = new Logger(AulaService.name)
   create(createAulaDto: CreateAulaDto) {
     return 'This action adds a new aula';
   }
