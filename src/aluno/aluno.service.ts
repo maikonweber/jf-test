@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
 
 @Injectable()
 export class AlunoService {
+  private readonly logger = new Logger(AlunoService.name)
   create(createAlunoDto: CreateAlunoDto) {
     return 'This action adds a new aluno';
   }
