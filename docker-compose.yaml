@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: MutterCorp
+    image: postgres:11.6-alpine
+    environment:
+      - POSTGRES_USER=MutterCorp
+      - POSTGRES_PASSWORD=ma128sio4
+      - POSTGRES_DB=MutterCorp
+      - POSTGRES_HOST=localhost
+      - POSTGRS_INITDB_ARGS=--locale=en_US.UTF-8
+    ports:
+      - 5932:5432
