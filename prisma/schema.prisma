@@ -12,19 +12,58 @@ datasource db {
 
 model professor {
   id    Int    @id @default(autoincrement())
-  nome String
+  nome  String
   aluno String
 }
 
 model aluno {
-  id    Int    @id @default(autoincrement())
-  nome String
-  aluno String
+  id          Int           @id @default(autoincrement())
+  nome        String
+  aluno       String
+  curso_aluno curso_aluno[]
+  aula_aluno  aula_aluno[]
 }
 
 model curso {
-  id          Int    @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   nome        String
   description String
   banner      String
+  curso_aluno curso_aluno[]
+  aula        aula[]
+}
+
+model aula {
+  id      Int    @id @default(autoincrement())
+  cursoId Int
+  content String
+
+  curso      curso        @relation(fields: [cursoId], references: [id])
+  aula_aluno aula_aluno[]
+}
+
+model aula_aluno {
+  id        Int      @id @default(autoincrement())
+  aulaId    Int
+  alunoId   Int
+  progresso Int
+  createdAt DateTime @default(now())
+
+  aula  aula  @relation(fields: [aulaId], references: [id])
+  aluno aluno @relation(fields: [alunoId], references: [id])
+
+  @@index([aulaId, alunoId], name: "unique_aula_aluno")
+}
+
+model curso_aluno {
+  id        Int      @id @default(autoincrement())
+  cursoId   Int
+  alunoId   Int
+  ativo     Boolean
+  createdAt DateTime @default(now())
+
+  curso curso @relation(fields: [cursoId], references: [id])
+  aluno aluno @relation(fields: [alunoId], references: [id])
+
+  @@index([cursoId, alunoId], name: "unique_curso_aluno")
 }
