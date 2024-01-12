@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger } from '@nestjs/common';
 import { ProfessorService } from './professor.service';
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 
 @Controller('professor')
 export class ProfessorController {
+  private readonly logger = new Logger(ProfessorController.name)
   constructor(private readonly professorService: ProfessorService) {}
 
   @Post()
