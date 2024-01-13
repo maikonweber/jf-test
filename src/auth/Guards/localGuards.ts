@@ -21,7 +21,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
                 throw new ForbiddenException('Invalid or missing Bearer token');
             }
 
-            
+
         }
 
         return super.canActivate(context);

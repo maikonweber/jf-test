@@ -5,11 +5,12 @@ import { AuthService } from '../auth.service';
 import { jwtConstants } from '../JwtContants';
 import { professor } from '@prisma/client';
 import { ProfessorService } from 'src/professor/professor.service';
+import { AlunoService } from 'src/aluno/aluno.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtStrategyAluno extends PassportStrategy(Strategy, 'jwt') {
     private readonly logger = new Logger(JwtStrategy.name);
-    constructor(private readonly authService: AuthService, private readonly professorService: ProfessorService) {
+    constructor(private readonly authService: AuthService, private readonly alunoService: AlunoService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: jwtConstants.secret,
@@ -19,13 +20,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     async validate(payload: any): Promise<any> {
         const { usecase, username } = payload;
 
-        if (usecase === 'Professor') {
-            const user = await this.professorService.findByUsername(username);
+        if (usecase === 'Aluno') {
+            const user = await this.alunoService.findByUsername(username);
             if (user) {
                 return user
             }
         }
-    
+
         throw new UnauthorizedException('Invalid user or usecase');
     }
 }

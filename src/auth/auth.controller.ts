@@ -29,4 +29,12 @@ export class AuthController {
     return await this.authService.loginIn(body.username);
     // return "Teste Controller"
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('loginAluno')
+  @ApiBody({ type: LoginDto })
+  async loginAluno(@Body() body: LoginDto) {
+    return await this.authService.loginAluno(body.username)
+
+  }
 }
