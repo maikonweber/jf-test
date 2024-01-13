@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards } from '@nestjs/common';
 import { AulaService } from './aula.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RoleGuard } from 'src/auth/Guards/RoleGuard';
+import { Roles } from 'src/auth/role.decorator';
 @ApiTags("Aulas Controller")
 @Controller('aula')
 export class AulaController {
@@ -10,6 +12,8 @@ export class AulaController {
   constructor(private readonly aulaService: AulaService) { }
 
   @ApiOperation({ summary: 'Create a New Aula ' })
+  @UseGuards(RoleGuard)
+  @Roles('professor')
   @Post()
   create(@Body() createAulaDto: CreateAulaDto) {
     return this.aulaService.create(createAulaDto);

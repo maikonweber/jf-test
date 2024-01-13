@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards } from '@nestjs/common';
 import { ProfessorService } from './professor.service';
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/auth/Guards/localGuards';
 
 @ApiTags('Professor Controller')
 @Controller('professor')
@@ -10,6 +12,7 @@ export class ProfessorController {
   private readonly logger = new Logger(ProfessorController.name)
   constructor(private readonly professorService: ProfessorService) { }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a New Professor' })
   @Post()
   create(@Body() createProfessorDto: CreateProfessorDto) {
