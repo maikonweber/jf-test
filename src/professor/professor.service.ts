@@ -22,6 +22,13 @@ export class ProfessorService {
     return this.prismaService.professor.findMany();
   }
 
+  findByUsername(username: string) {
+    return this.prismaService.professor.findFirst(
+      {
+        where: { username: username }
+      }
+    )
+  }
   findOne(id: number) {
     return this.prismaService.professor.findFirstOrThrow({
       where: { id: id }

@@ -17,6 +17,14 @@ export class AlunoService {
     })
   }
 
+  findByUsername(username: string) {
+    return this.prismaService.aluno.findFirst(
+      {
+        where: { username: username }
+      }
+    )
+  }
+
   findAll() {
     return this.prismaService.aluno.findMany();
   }

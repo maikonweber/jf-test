@@ -5,6 +5,8 @@ import { AlunoModule } from './aluno/aluno.module';
 import { CursoModule } from './curso/curso.module';
 import { AulaModule } from './aula/aula.module';
 import { SeedServiceService } from './seed-service/seed-service.service';
+import { AuthModule } from './auth/auth.module';
+
 
 @Module({
   imports: [
@@ -12,7 +14,8 @@ import { SeedServiceService } from './seed-service/seed-service.service';
     ProfessorModule,
     AlunoModule,
     CursoModule,
-    AulaModule
+    AulaModule,
+    AuthModule
   ],
   controllers: [],
   providers: [SeedServiceService],
