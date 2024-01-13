@@ -10,16 +10,18 @@ import { AuthGuard } from '@nestjs/passport';
 export class JwtAuthGuard extends AuthGuard('jwt') {
     private readonly logger = new Logger(JwtAuthGuard.name)
     canActivate(context: ExecutionContext) {
-        console.log(context)
+
         const httpContext = context.switchToHttp();
         if (httpContext.getRequest) {
             const request = httpContext.getRequest();
-            console.log(request.headers)
+
             const authHeader = request.headers.authorization;
-            this.logger.log(authHeader)
+
             if (!authHeader || !authHeader.startsWith('Bearer ')) {
                 throw new ForbiddenException('Invalid or missing Bearer token');
             }
+
+            
         }
 
         return super.canActivate(context);

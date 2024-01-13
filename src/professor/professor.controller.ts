@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards } 
 import { ProfessorService } from './professor.service';
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/Guards/localGuards';
 
@@ -12,6 +12,7 @@ export class ProfessorController {
   private readonly logger = new Logger(ProfessorController.name)
   constructor(private readonly professorService: ProfessorService) { }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a New Professor' })
   @Post()
@@ -19,18 +20,21 @@ export class ProfessorController {
     return this.professorService.create(createProfessorDto);
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get All Professor' })
   @Get()
   createCurso() {
     return this.professorService.findAll();
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get Professor by id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.professorService.findOne(+id);
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update Professor by Id' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProfessorDto: UpdateProfessorDto) {

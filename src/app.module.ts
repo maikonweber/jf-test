@@ -6,6 +6,7 @@ import { CursoModule } from './curso/curso.module';
 import { AulaModule } from './aula/aula.module';
 import { SeedServiceService } from './seed-service/seed-service.service';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
@@ -15,7 +16,11 @@ import { AuthModule } from './auth/auth.module';
     AlunoModule,
     CursoModule,
     AulaModule,
-    AuthModule
+    AuthModule,
+    JwtModule.register({
+      secret: 'your-secret-key',
+      signOptions: { expiresIn: '1d' },
+    })
   ],
   controllers: [],
   providers: [SeedServiceService],
