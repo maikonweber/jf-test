@@ -4,6 +4,7 @@ import { ProfessorModule } from './professor/professor.module';
 import { AlunoModule } from './aluno/aluno.module';
 import { CursoModule } from './curso/curso.module';
 import { AulaModule } from './aula/aula.module';
+import { SeedServiceService } from './seed-service/seed-service.service';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { AulaModule } from './aula/aula.module';
     AulaModule
   ],
   controllers: [],
-  providers: [],
+  providers: [SeedServiceService],
 })
 export class AppModule {}

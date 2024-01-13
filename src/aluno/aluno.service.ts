@@ -1,27 +1,42 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
+import { PrismaService } from 'prisma/PrismaService';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
 
 @Injectable()
 export class AlunoService {
   private readonly logger = new Logger(AlunoService.name)
+  constructor(private readonly prismaService: PrismaService) {
+  }
+
   create(createAlunoDto: CreateAlunoDto) {
-    return 'This action adds a new aluno';
+    return this.prismaService.aluno.create({
+      data: createAlunoDto
+    })
   }
 
   findAll() {
-    return `This action returns all aluno`;
+    return this.prismaService.aluno.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} aluno`;
+    return this.prismaService.aluno.findFirstOrThrow({
+      where: { id: id }
+    });
   }
 
   update(id: number, updateAlunoDto: UpdateAlunoDto) {
-    return `This action updates a #${id} aluno`;
+    return this.prismaService.aluno.update({
+      where: { id: id },
+      data: updateAlunoDto
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} aluno`;
+    return this.prismaService.aluno.delete({
+      where: { id: id }
+    });
   }
 }

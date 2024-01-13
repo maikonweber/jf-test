@@ -2,32 +2,35 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Logger } from '@nest
 import { CursoService } from './curso.service';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Cursos Controller")
 @Controller('curso')
 export class CursoController {
   private readonly logger = new Logger(CursoController.name)
-  constructor(private readonly cursoService: CursoService) {}
-
+  constructor(private readonly cursoService: CursoService) { }
+  @ApiOperation({ summary: 'Create a New Curso' })
   @Post()
   create(@Body() createCursoDto: CreateCursoDto) {
     return this.cursoService.create(createCursoDto);
   }
-
+  @ApiOperation({ summary: 'Find all Cursos ' })
   @Get()
   findAll() {
     return this.cursoService.findAll();
   }
-
+  @ApiOperation({ summary: 'Find Curso by Id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cursoService.findOne(+id);
   }
-
+  @ApiOperation({ summary: 'Update Curso By Id' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCursoDto: UpdateCursoDto) {
     return this.cursoService.update(+id, updateCursoDto);
   }
 
+  @ApiOperation({ summary: 'Delete Curso By ID' })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.cursoService.remove(+id);

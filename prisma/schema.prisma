@@ -13,13 +13,13 @@ datasource db {
 model professor {
   id    Int    @id @default(autoincrement())
   nome  String
-  aluno String
+  username String @unique()
 }
 
 model aluno {
   id          Int           @id @default(autoincrement())
   nome        String
-  aluno       String
+  username      String @unique()
   curso_aluno curso_aluno[]
   aula_aluno  aula_aluno[]
 }
