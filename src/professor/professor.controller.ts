@@ -32,23 +32,26 @@ export class ProfessorController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("Professor")
   @ApiOperation({ summary: 'Get Professor by id' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.professorService.findOne(+id);
+  findOne(@Request() req) {
+    return this.professorService.findOne(req.user.id);
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("Professor")
   @ApiOperation({ summary: 'Update Professor by Id' })
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfessorDto: UpdateProfessorDto) {
-    return this.professorService.update(+id, updateProfessorDto);
+  @Patch('')
+  update(@Request() req, @Body() updateProfessorDto: UpdateProfessorDto) {
+    return this.professorService.update(req.user.id, updateProfessorDto);
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("Professor")
   @ApiOperation({ summary: 'Get Delete Professor by Id' })
   @Delete(':id')
   remove(@Param('id') id: string) {
