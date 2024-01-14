@@ -23,16 +23,67 @@ export class CursoService {
     return this.prismaService.curso.findMany();
   }
 
-  async findAllAulasByCourseAulo (id: number) {
-    
+  async findAllAulasByCourseAulo(id: number) {
+    return this.prismaService.curso_aluno.findMany({
+      where: { alunoId: id },
+      include: {
+        curso: {
+          include: {
+            curso_aluno: true,
+          },
+        },
+      }
+    })
+  }
+
+  async giveAccess(aluno_id: number, curso_id: number) {
+    return this.prismaService.curso_aluno.create({
+      data: {
+        alunoId: aluno_id,
+        cursoId: curso_id,
+        ativo: true
+      }
+    })
+  }
+  async updateStatus(cursoId: number, alunoId: number, novoStatus: boolean) {
+    const id = await this.prismaService.curso_aluno.findFirstOrThrow({
+      where: {
+        cursoId,
+        alunoId
+      }
+    })
+
+    const update = await this.prismaService.curso_aluno.update({
+      where: {
+        id: id.id
+      },
+      data: {
+        ativo: novoStatus
+      }
+    })
+
+    return update
   }
 
   async findAllAlunosCourse(id: number) {
+    const alunosDoCurso = await this.prismaService.curso_aluno.findMany({
+      where: {
+        cursoId: id,
+      },
+      include: {
+        aluno: true,
+      },
+    });
 
+    return alunosDoCurso
   }
 
   async findAllAulasCourse(id: number) {
-
+    return this.prismaService.aula.findMany({
+      where: {
+        cursoId: id
+      }
+    })
   }
 
   findOne(id: number) {

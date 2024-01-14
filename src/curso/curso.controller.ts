@@ -26,7 +26,7 @@ export class CursoController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: 'Find all Cursos ' })
-  @Get()
+  @Get('all')
   findAll() {
     return this.cursoService.findAll();
   }
@@ -35,7 +35,7 @@ export class CursoController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: 'Find Curso by Id' })
-  @Get(':id')
+  @Get('findone/:id')
   findOne(@Param('id') id: string) {
     return this.cursoService.findOne(+id);
   }
@@ -45,7 +45,7 @@ export class CursoController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Aluno")
   @ApiOperation({ summary: 'Lista todos curso e aulas que um aluno tem disponivel' })
-  @Get(':id')
+  @Get('findselfcourse/:id')
   findCursoAndAulasSelf(@Request() req, id: string) {
     return this.cursoService.findAllAulasByCourseAulo(req.user.id);
   }
@@ -74,7 +74,7 @@ export class CursoController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiOperation({ summary: "Visualiza todoso os alunos registrado neste curso" })
   @Roles("Professor")
-  @Get(":id")
+  @Get("find_aluno_in_course/:id")
   listAllAlunoInCurso(@Param('id') id: string) {
     return this.cursoService.findAllAlunosCourse(+id);
   }
@@ -83,7 +83,7 @@ export class CursoController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor", "Aluno")
   @ApiOperation({ summary: "Lista todas as Aulas deste Curso if Aluno Apenas se esta incrito" })
-  @Get(":id")
+  @Get("find_aulas_course/:id")
   listAulasInCurso(@Param('id') id: string) {
     return this.cursoService.findAllAulasCourse(+id)
   }
@@ -92,8 +92,8 @@ export class CursoController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: "Aprova um Aluno" })
-  @Get(":id")
-  ApproveAluno() {
+  @Get("approve/:id:curso_id")
+  ApproveAluno(@Param("id") aluno_id: string, @Param("curso_id") cursoId: string) {
     return
   }
 
@@ -101,17 +101,17 @@ export class CursoController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: "Da acesso ao um Curso" })
-  @Get(":id")
-  GiveAccess() {
-    return
+  @Get("giveaccess/:id")
+  GiveAccess(@Param("id") aluno_id: string, @Param("curso_id") cursoId: string) {
+    return this.cursoService.giveAccess(+aluno_id, +cursoId)
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: "Remove Acesso ao Curso - ID - Aluno" })
-  @Get(":id")
-  RemoveAcess() {
-    return
+  @Get("removeacess/:id:cursoId")
+  RemoveAcess(@Param('id') aluno_id: string, @Param('cursoId') cursoId: string) {
+    return this.cursoService.updateStatus(+aluno_id, +cursoId, true)
   }
 }
