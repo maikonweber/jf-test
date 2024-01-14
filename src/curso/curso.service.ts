@@ -11,26 +11,37 @@ export class CursoService {
 
   }
 
-  
+
   create(createCursoDto: CreateCursoDto) {
     return this.prismaService.curso.create({
       data: createCursoDto
     });
   }
 
-  
+
   findAll() {
     return this.prismaService.curso.findMany();
   }
 
- 
+  async findAllAulasByCourseAulo (id: number) {
+    
+  }
+
+  async findAllAlunosCourse(id: number) {
+
+  }
+
+  async findAllAulasCourse(id: number) {
+
+  }
+
   findOne(id: number) {
     return this.prismaService.curso.findFirstOrThrow({
       where: { id: id }
     });
   }
 
- 
+
   update(id: number, updateCursoDto: UpdateCursoDto) {
     return this.prismaService.curso.update({
       where: { id: id },
