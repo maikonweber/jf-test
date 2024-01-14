@@ -31,6 +31,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         if (err || !user) {
             throw err || new ForbiddenException();
         }
+        console.log(user)
+        const roles = user.usecase; // Assumindo que a informação de roles está no objeto do usuário
+
+        // Se o usuário tiver a role "aluno" ou "professor", permitir o acesso
+        if (roles.includes('Professor') || roles.includes("Aluno")) {
+            return user;
+        } else {
+            throw new ForbiddenException('Access denied: Insufficient privileges');
+        }
+
+
         return user;
     }
 }

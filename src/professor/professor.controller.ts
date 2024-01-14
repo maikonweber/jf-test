@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards, Request } from '@nestjs/common';
 import { ProfessorService } from './professor.service';
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/Guards/localGuards';
+import { RoleGuard } from 'src/auth/Guards/RoleGuard';
+import { Roles } from 'src/auth/role.decorator';
 
 @ApiTags('Professor Controller')
 @Controller('professor')
@@ -21,13 +22,17 @@ export class ProfessorController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("Professor")
   @ApiOperation({ summary: 'Get All Professor' })
   @Get()
-  createCurso() {
+  createCurso(@Request() req) {
+    console.log(req.user)
     return this.professorService.findAll();
   }
 
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get Professor by id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -35,12 +40,15 @@ export class ProfessorController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update Professor by Id' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProfessorDto: UpdateProfessorDto) {
     return this.professorService.update(+id, updateProfessorDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get Delete Professor by Id' })
   @Delete(':id')
   remove(@Param('id') id: string) {

@@ -9,7 +9,7 @@ import { AlunoService } from 'src/aluno/aluno.service';
 
 @Injectable()
 export class JwtStrategyAluno extends PassportStrategy(Strategy, 'jwt') {
-    private readonly logger = new Logger(JwtStrategy.name);
+    private readonly logger = new Logger(JwtStrategyAluno.name);
     constructor(private readonly authService: AuthService, private readonly alunoService: AlunoService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

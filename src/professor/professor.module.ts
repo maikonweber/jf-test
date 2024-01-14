@@ -7,10 +7,6 @@ import { jwtConstants } from 'src/auth/JwtContants';
 
 @Module({
   imports: [
-    JwtModule.register({
-      privateKey: jwtConstants.secret,
-      signOptions: { expiresIn: '5d' },
-    })
   ],
   controllers: [ProfessorController],
   providers: [ProfessorService, PrismaService],

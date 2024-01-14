@@ -17,6 +17,7 @@ export class AuthService {
         this.logger.log(professor)
         if (!professor) throw new NotAcceptableException('could not find the user')
         const access_token: string = await this.jwtService.signAsync({
+            id: professor.id,
             username: professor.username,
             usecase: "Professor"
         });
@@ -30,6 +31,7 @@ export class AuthService {
         this.logger.log(aluno)
         if (!aluno) throw new NotAcceptableException('could not find the user')
         const access_token: string = await this.jwtService.signAsync({
+            id: aluno.id,
             username: aluno.username,
             usecase: "Aluno"
         });
