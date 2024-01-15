@@ -28,7 +28,7 @@ export class CursoService {
     try {
       return this.prismaService.curso.findMany();
     } catch (error) {
-      this.logger.error(`Erro ao Buscar curso: ${}`)
+      this.logger.error(`Erro ao Buscar curso: ${error.message}`)
       throw new InternalServerErrorException("Erro interno ao buscar curso")
     }
   }
