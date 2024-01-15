@@ -31,6 +31,7 @@ model curso {
   banner      String
   curso_aluno curso_aluno[]
   aula        aula[]
+  aulasAluno  aula_aluno[]
 }
 
 model aula {
@@ -46,14 +47,17 @@ model aula_aluno {
   id        Int      @id @default(autoincrement())
   aulaId    Int
   alunoId   Int
+  cursoId   Int
   progresso Int
   createdAt DateTime @default(now())
 
   aula  aula  @relation(fields: [aulaId], references: [id])
   aluno aluno @relation(fields: [alunoId], references: [id])
+  curso curso @relation(fields: [cursoId], references: [id])
 
   @@index([aulaId, alunoId], name: "unique_aula_aluno")
 }
+
 
 model curso_aluno {
   id        Int      @id @default(autoincrement())
@@ -61,9 +65,17 @@ model curso_aluno {
   alunoId   Int
   ativo     Boolean
   createdAt DateTime @default(now())
+  status Status
 
   curso curso @relation(fields: [cursoId], references: [id])
   aluno aluno @relation(fields: [alunoId], references: [id])
-
+  @@map("cursos")
   @@index([cursoId, alunoId], name: "unique_curso_aluno")
+}
+
+enum Status {
+  NaoIniciado
+  EmAndamento
+  Finalizado
+  Aprovado
 }

@@ -41,10 +41,12 @@ export class CursoService {
       data: {
         alunoId: aluno_id,
         cursoId: curso_id,
-        ativo: true
+        ativo: true,
+        status: "NaoIniciado"
       }
     })
   }
+
   async updateStatus(cursoId: number, alunoId: number, novoStatus: boolean) {
     const id = await this.prismaService.curso_aluno.findFirstOrThrow({
       where: {
@@ -63,6 +65,31 @@ export class CursoService {
     })
 
     return update
+  }
+
+  async removeAcess(cursoId: number, alunoId: number, novoStatus: boolean) {
+    const id = await this.prismaService.curso_aluno.findFirstOrThrow({
+      where: {
+        cursoId,
+        alunoId
+      }
+    })
+
+    const update = await this.prismaService.curso_aluno.delete({
+      where: {
+        id: id.id
+      },
+    })
+
+    return update
+  }
+
+  async approveAluno(aluno_id: number, course_id: number) {
+    const aulas = await this.prismaService.aula.findMany({
+      where: {
+        cursoId: aluno_id,
+      }
+    })
   }
 
   async findAllAlunosCourse(id: number) {

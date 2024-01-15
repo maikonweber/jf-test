@@ -21,7 +21,7 @@
     "format_prisma": "npx prisma format --schema=./prisma/schema.prisma",
     "generate": "npx prisma generate --schema=./prisma/schema.prisma",
     "migrate:up": "npx prisma migrate dev --schema=./prisma/schema.prisma",
-    "migrate:down": "npx prisma migrate up --schema=./prisma/schema.prisma"
+    "migrate:down": "npx prisma migrate down --schema=./prisma/schema.prisma"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",

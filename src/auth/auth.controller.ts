@@ -22,9 +22,9 @@ export class AuthController {
   private readonly logger = new Logger();
   constructor(private readonly authService: AuthService) { }
   @HttpCode(HttpStatus.OK)
-  @Post('login')
+  @Post('loginProfessor')
   @ApiBody({ type: LoginDto })
-  async login(@Body() body: LoginDto) {
+  async loginProfessor(@Body() body: LoginDto) {
 
     return await this.authService.loginIn(body.username);
     // return "Teste Controller"
