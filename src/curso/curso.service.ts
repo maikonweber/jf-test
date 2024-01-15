@@ -85,11 +85,33 @@ export class CursoService {
   }
 
   async approveAluno(aluno_id: number, course_id: number) {
-    const aulas = await this.prismaService.aula.findMany({
+    const aulas = await this.prismaService.aula_aluno.findMany({
       where: {
-        cursoId: aluno_id,
+        cursoId: course_id,
+        alunoId: aluno_id
       }
     })
+
+    const allAulasVisualizadas = aulas.every((aula) => aula.progresso === 3);
+
+    if (!allAulasVisualizadas) {
+      const curso_aluno = await this.prismaService.curso_aluno.findFirst({
+        where: {
+          cursoId: course_id,
+          alunoId: aluno_id
+        }
+      })
+
+      return this.prismaService.curso_aluno.update({
+        where: { id: curso_aluno.id },
+        data: {
+          status: 'Aprovado'
+        }
+      })
+
+    }
+
+    return 
   }
 
   async findAllAlunosCourse(id: number) {
