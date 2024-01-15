@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
 import { PrismaService } from 'prisma/PrismaService';
@@ -13,107 +13,125 @@ export class CursoService {
 
 
   create(createCursoDto: CreateCursoDto) {
-    return this.prismaService.curso.create({
-      data: createCursoDto
-    });
+    try {
+      return this.prismaService.curso.create({
+        data: createCursoDto
+      })
+    } catch (error) {
+      this.logger.error(`Erro ao criar curso: ${error.message}`)
+      throw new InternalServerErrorException("Erro interno ao criar curso")
+    };
   }
 
 
   findAll() {
-    return this.prismaService.curso.findMany();
+    try {
+      return this.prismaService.curso.findMany();
+    } catch (error) {
+      this.logger.error(`Erro ao Buscar curso: ${}`)
+      throw new InternalServerErrorException("Erro interno ao buscar curso")
+    }
   }
 
   async findAllAulasByCourseAulo(id: number) {
-    return this.prismaService.curso_aluno.findMany({
-      where: { alunoId: id },
-      include: {
-        curso: {
-          include: {
-            curso_aluno: true,
+    try {
+      return this.prismaService.curso_aluno.findMany({
+        where: { alunoId: id },
+        include: {
+          curso: {
+            include: {
+              curso_aluno: true,
+            },
           },
-        },
-      }
-    })
+        }
+      })
+    } catch (error) {
+      this.logger.error(`Erro ao buscar todos aulas e cursos do aluno: ${error.message}`)
+      throw new InternalServerErrorException("Erro interno na busca pelas aulas do aluno")
+    }
   }
 
+
   async giveAccess(aluno_id: number, curso_id: number) {
-    return this.prismaService.curso_aluno.create({
-      data: {
-        alunoId: aluno_id,
-        cursoId: curso_id,
-        ativo: true,
-        status: "NaoIniciado"
-      }
-    })
+    try {
+      return await this.prismaService.curso_aluno.create({
+        data: {
+          alunoId: aluno_id,
+          cursoId: curso_id,
+          ativo: true,
+          status: "NaoIniciado"
+        }
+      });
+    } catch (error) {
+      this.logger.error(`Erro ao conceder acesso: ${error.message}`);
+      throw new InternalServerErrorException('Erro interno ao conceder acesso');
+    }
   }
 
   async updateStatus(cursoId: number, alunoId: number, novoStatus: boolean) {
-    const id = await this.prismaService.curso_aluno.findFirstOrThrow({
-      where: {
-        cursoId,
-        alunoId
-      }
-    })
+    try {
+      const id = await this.prismaService.curso_aluno.findFirstOrThrow({
+        where: {
+          cursoId,
+          alunoId
+        }
+      });
 
-    const update = await this.prismaService.curso_aluno.update({
-      where: {
-        id: id.id
-      },
-      data: {
-        ativo: novoStatus
-      }
-    })
+      const update = await this.prismaService.curso_aluno.update({
+        where: {
+          id: id.id
+        },
+        data: {
+          ativo: novoStatus
+        }
+      });
 
-    return update
-  }
-
-  async removeAcess(cursoId: number, alunoId: number, novoStatus: boolean) {
-    const id = await this.prismaService.curso_aluno.findFirstOrThrow({
-      where: {
-        cursoId,
-        alunoId
-      }
-    })
-
-    const update = await this.prismaService.curso_aluno.delete({
-      where: {
-        id: id.id
-      },
-    })
-
-    return update
+      return update;
+    } catch (error) {
+      this.logger.error(`Erro ao atualizar status: ${error.message}`);
+      throw new InternalServerErrorException('Erro interno ao atualizar status');
+    }
   }
 
   async approveAluno(aluno_id: number, course_id: number) {
-    const aulas = await this.prismaService.aula_aluno.findMany({
-      where: {
-        cursoId: course_id,
-        alunoId: aluno_id
-      }
-    })
-
-    const allAulasVisualizadas = aulas.every((aula) => aula.progresso === 3);
-
-    if (!allAulasVisualizadas) {
-      const curso_aluno = await this.prismaService.curso_aluno.findFirst({
+    try {
+      const aulas = await this.prismaService.aula_aluno.findMany({
         where: {
           cursoId: course_id,
           alunoId: aluno_id
         }
-      })
+      });
 
-      return this.prismaService.curso_aluno.update({
-        where: { id: curso_aluno.id },
-        data: {
-          status: 'Aprovado'
+      const allAulasVisualizadas = aulas.every((aula) => aula.progresso === 3);
+
+      if (!allAulasVisualizadas) {
+        const curso_aluno = await this.prismaService.curso_aluno.findFirst({
+          where: {
+            cursoId: course_id,
+            alunoId: aluno_id
+          }
+        });
+
+        if (!curso_aluno) {
+          throw new NotFoundException('Curso do aluno não encontrado');
         }
-      })
 
+        return this.prismaService.curso_aluno.update({
+          where: { id: curso_aluno.id },
+          data: {
+            status: 'Aprovado'
+          }
+        });
+      }
+
+      throw new BadRequestException('Não é possível aprovar o aluno no momento');
+
+    } catch (error) {
+      this.logger.error(`Erro ao aprovar aluno: ${error.message}`);
+      throw new InternalServerErrorException('Erro interno ao aprovar aluno');
     }
-
-    return 
   }
-
+  
   async findAllAlunosCourse(id: number) {
     const alunosDoCurso = await this.prismaService.curso_aluno.findMany({
       where: {
@@ -129,30 +147,50 @@ export class CursoService {
   }
 
   async findAllAulasCourse(id: number) {
-    return this.prismaService.aula.findMany({
-      where: {
-        cursoId: id
-      }
-    })
+    try {
+      return await this.prismaService.aula.findMany({
+        where: {
+          cursoId: id
+        }
+      });
+    } catch (error) {
+      this.logger.error(`Erro ao buscar aulas do curso: ${error.message}`);
+      throw new InternalServerErrorException('Erro interno ao buscar aulas do curso');
+    }
   }
 
-  findOne(id: number) {
-    return this.prismaService.curso.findFirstOrThrow({
-      where: { id: id }
-    });
+   async findOne(id: number) {
+    try {
+      return await this.prismaService.curso.findFirstOrThrow({
+        where: { id: id }
+      });
+    } catch (error) {
+      this.logger.error(`Erro ao buscar curso por ID: ${error.message}`);
+      throw new NotFoundException('Curso não encontrado');
+    }
   }
 
-
-  update(id: number, updateCursoDto: UpdateCursoDto) {
-    return this.prismaService.curso.update({
-      where: { id: id },
-      data: updateCursoDto
-    });
+  async update(id: number, updateCursoDto: UpdateCursoDto) {
+    try {
+      return await this.prismaService.curso.update({
+        where: { id: id },
+        data: updateCursoDto
+      });
+    } catch (error) {
+      this.logger.error(`Erro ao atualizar curso: ${error.message}`);
+      throw new InternalServerErrorException('Erro interno ao atualizar curso');
+    }
   }
 
-  remove(id: number) {
-    return this.prismaService.curso.delete({
-      where: { id: id }
-    });
+  async remove(id: number) {
+    try {
+      return await this.prismaService.curso.delete({
+        where: { id: id }
+      });
+    } catch (error) {
+      this.logger.error(`Erro ao excluir curso: ${error.message}`);
+      throw new InternalServerErrorException('Erro interno ao excluir curso');
+    }
   }
+
 }
