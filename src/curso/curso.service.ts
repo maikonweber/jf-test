@@ -96,6 +96,7 @@ export class CursoService {
     const alunosDoCurso = await this.prismaService.curso_aluno.findMany({
       where: {
         cursoId: id,
+        ativo: true
       },
       include: {
         aluno: true,
