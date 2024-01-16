@@ -58,6 +58,7 @@ export class AulaController {
     return this.aulaService.remove(+id);
   }
 
+
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Aluno")
@@ -66,6 +67,5 @@ export class AulaController {
   WatchAula(@Request() req, @Param('aula_id') aula_id: string) {
     return this.aulaService.watch_aula(+aula_id, req.user.id)
   }
-
 
 }

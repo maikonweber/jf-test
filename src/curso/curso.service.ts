@@ -41,6 +41,7 @@ export class CursoService {
           curso: {
             include: {
               curso_aluno: true,
+              aulasAluno: true
             },
           },
         }
@@ -119,34 +120,22 @@ export class CursoService {
 
   async approveAluno(aluno_id: number, course_id: number) {
     try {
-      const aulas = await this.prismaService.aula_aluno.findMany({
+      const curso_aluno = await this.prismaService.curso_aluno.findFirstOrThrow({
         where: {
           cursoId: course_id,
           alunoId: aluno_id
         }
       });
 
-      const allAulasVisualizadas = aulas.every((aula) => aula.progresso === "Visualizado");
-
-      if (!allAulasVisualizadas) {
-        const curso_aluno = await this.prismaService.curso_aluno.findFirst({
-          where: {
-            cursoId: course_id,
-            alunoId: aluno_id
-          }
-        });
-
-        if (!curso_aluno) {
-          throw new NotFoundException('Curso do aluno não encontrado');
-        }
-
+      if (curso_aluno.status === "Finalizado") {
         return this.prismaService.curso_aluno.update({
           where: { id: curso_aluno.id },
           data: {
             status: 'Aprovado'
           }
         });
-      }
+      };
+
 
       throw new BadRequestException('Não é possível aprovar o aluno no momento');
 

@@ -127,4 +127,13 @@ export class AulaService {
     }
   }
 
+  availableAulas(aluno_id: number) {
+    return this.prismaService.aula_aluno.findMany({
+      where: { alunoId: aluno_id },
+      include: {
+        curso: true
+      }
+    })
+  }
+
 }
