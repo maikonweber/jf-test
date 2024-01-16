@@ -54,19 +54,43 @@ export class CursoService {
 
   async giveAccess(aluno_id: number, curso_id: number) {
     try {
-      return await this.prismaService.curso_aluno.create({
-        data: {
-          alunoId: aluno_id,
-          cursoId: curso_id,
-          ativo: true,
-          status: "NaoIniciado"
-        }
+      await this.prismaService.$transaction(async (prisma) => {
+        // Create curso_aluno entry
+        await prisma.curso_aluno.create({
+          data: {
+            alunoId: aluno_id,
+            cursoId: curso_id,
+            ativo: true,
+            status: "NaoIniciado"
+          }
+        });
+
+        // Create aula_aluno entries for each aula in the curso
+        const aulas_in_course = await prisma.aula.findMany({
+          where: { cursoId: curso_id }
+        });
+
+        await Promise.all(
+          aulas_in_course.map(async (el) => {
+            await prisma.aula_aluno.create({
+              data: {
+                cursoId: curso_id,
+                alunoId: aluno_id,
+                aulaId: el.id,
+                progresso: "NaoIniciado"
+              }
+            });
+          })
+        );
       });
+
+      return;
     } catch (error) {
       this.logger.error(`Erro ao conceder acesso: ${error.message}`);
       throw new InternalServerErrorException('Erro interno ao conceder acesso');
     }
   }
+
 
   async updateStatus(cursoId: number, alunoId: number, novoStatus: boolean) {
     try {
@@ -102,7 +126,7 @@ export class CursoService {
         }
       });
 
-      const allAulasVisualizadas = aulas.every((aula) => aula.progresso === 3);
+      const allAulasVisualizadas = aulas.every((aula) => aula.progresso === "Visualizado");
 
       if (!allAulasVisualizadas) {
         const curso_aluno = await this.prismaService.curso_aluno.findFirst({
@@ -131,7 +155,7 @@ export class CursoService {
       throw new InternalServerErrorException('Erro interno ao aprovar aluno');
     }
   }
-  
+
   async findAllAlunosCourse(id: number) {
     const alunosDoCurso = await this.prismaService.curso_aluno.findMany({
       where: {
@@ -159,7 +183,7 @@ export class CursoService {
     }
   }
 
-   async findOne(id: number) {
+  async findOne(id: number) {
     try {
       return await this.prismaService.curso.findFirstOrThrow({
         where: { id: id }

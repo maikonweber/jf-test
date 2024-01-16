@@ -110,8 +110,8 @@ export class CursoController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: "Remove Acesso ao Curso - ID - Aluno" })
-  @Delete("removeacess/:aluno_id:curso_id")
-  RemoveAcess(@Param('aluno_id') aluno_id: string, @Param('cursoId') cursoId: string) {
+  @Patch("removeacess/:aluno_id:curso_id")
+  RemoveAcess(@Param('aluno_id') aluno_id: string, @Param('curso_id') cursoId: string) {
     return this.cursoService.updateStatus(+aluno_id, +cursoId, false)
   }
 }

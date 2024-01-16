@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards, Request } from '@nestjs/common';
 import { AulaService } from './aula.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleGuard } from 'src/auth/Guards/RoleGuard';
 import { Roles } from 'src/auth/role.decorator';
 import { JwtAuthGuard } from 'src/auth/Guards/localGuards';
@@ -12,14 +12,17 @@ export class AulaController {
   private readonly logger = new Logger(AulaController.name)
   constructor(private readonly aulaService: AulaService) { }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a New Aula ' })
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @Post()
   create(@Body() createAulaDto: CreateAulaDto) {
+    this.logger.log("Teste")
     return this.aulaService.create(createAulaDto);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: 'Find all Aulas' })
@@ -28,6 +31,7 @@ export class AulaController {
     return this.aulaService.findAll();
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor, Aluno")
   @ApiOperation({ summary: 'Find Aulas by Id ' })
@@ -36,6 +40,7 @@ export class AulaController {
     return this.aulaService.findOne(+id);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: 'Update Aulas By Id' })
@@ -44,6 +49,7 @@ export class AulaController {
     return this.aulaService.update(+id, updateAulaDto);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @ApiOperation({ summary: 'Delete Aulas By Id' })
@@ -52,12 +58,13 @@ export class AulaController {
     return this.aulaService.remove(+id);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Aluno")
-  @ApiOperation({ summary: 'Vizualizar Aula' })
-  @Get('/see/:id')
-  seeAula() {
-    return
+  @ApiOperation({ summary: 'Vizualizar Aula e Define o Status do Curso' })
+  @Get('/watch_aula/:aula_id')
+  WatchAula(@Request() req, @Param('aula_id') aula_id: string) {
+    return this.aulaService.watch_aula(+aula_id, req.user.id)
   }
 
 

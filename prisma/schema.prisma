@@ -11,15 +11,15 @@ datasource db {
 }
 
 model professor {
-  id    Int    @id @default(autoincrement())
-  nome  String
+  id       Int    @id @default(autoincrement())
+  nome     String
   username String @unique()
 }
 
 model aluno {
   id          Int           @id @default(autoincrement())
   nome        String
-  username      String @unique()
+  username    String        @unique()
   curso_aluno curso_aluno[]
   aula_aluno  aula_aluno[]
 }
@@ -43,13 +43,14 @@ model aula {
   aula_aluno aula_aluno[]
 }
 
+
 model aula_aluno {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   aulaId    Int
   alunoId   Int
   cursoId   Int
-  progresso Int
-  createdAt DateTime @default(now())
+  progresso String
+  createdAt DateTime  @default(now())
 
   aula  aula  @relation(fields: [aulaId], references: [id])
   aluno aluno @relation(fields: [alunoId], references: [id])
@@ -58,20 +59,21 @@ model aula_aluno {
   @@index([aulaId, alunoId], name: "unique_aula_aluno")
 }
 
-
 model curso_aluno {
   id        Int      @id @default(autoincrement())
   cursoId   Int
   alunoId   Int
   ativo     Boolean
   createdAt DateTime @default(now())
-  status Status
+  status    Status
 
   curso curso @relation(fields: [cursoId], references: [id])
   aluno aluno @relation(fields: [alunoId], references: [id])
-  @@map("cursos")
+
   @@index([cursoId, alunoId], name: "unique_curso_aluno")
+  @@map("cursos")
 }
+
 
 enum Status {
   NaoIniciado

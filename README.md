@@ -16,18 +16,18 @@ Aluno (Nome, usuário)
 Um texto ou um arquivo (pdf, xlsx, docx, pptx) ou um link.
 
 [x]  O professor consegue ver todos os alunos com acesso ao curso e quantas aulas do total eles visualizaram.
-[] O professor pode aprovar um aluno, CONTANTO QUE esse aluno tenha assistido a 100% das aulas daquele curso.
+[x] O professor pode aprovar um aluno, CONTANTO QUE esse aluno tenha assistido a 100% das aulas daquele curso.
 
-[] O aluno consegue apenas visualizar os cursos e aulas e somente dos cursos aos quais ele tiver sido cadastrado.
-[] Cada aula que o aluno visualiza é registrada no sistema vinculada ao seu usuário.
+[x] O aluno consegue apenas visualizar os cursos e aulas e somente dos cursos aos quais ele tiver sido cadastrado.
+[x] Cada aula que o aluno visualiza é registrada no sistema vinculada ao seu usuário.
 
-[] O aluno consegue ver seu status no curso:
-[] Não iniciado:  quando tem 0 aulas visualizadas
-[] Em andamento: quando tem ao menos uma aula visualizada
-[] Finalizado: Quando tem 100% das aulas visualizadas, porém sem aprovação do professor
-[] Aprovado: Quando o professor aprova
+[x] O aluno consegue ver seu status no curso:
+[x] Não iniciado:  quando tem 0 aulas visualizadas
+[x] Em andamento: quando tem ao menos uma aula visualizada
+[x] Finalizado: Quando tem 100% das aulas visualizadas, porém sem aprovação do professor
+[x] Aprovado: Quando o professor aprova
 
-[] Um aluno não consegue ver os cursos, aulas, e nem dados de outros alunos. Apenas os próprios.
+[x] Um aluno não consegue ver os cursos, aulas, e nem dados de outros alunos. Apenas os próprios.
 
 
 ## Installation

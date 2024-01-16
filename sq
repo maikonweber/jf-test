@@ -1,0 +1,18 @@
+                  List of relations
+ Schema |        Name        |   Type   |   Owner    
+--------+--------------------+----------+------------
+ public | _prisma_migrations | table    | MutterCorp
+ public | aluno              | table    | MutterCorp
+ public | aluno_id_seq       | sequence | MutterCorp
+ public | aula               | table    | MutterCorp
+ public | aula_aluno         | table    | MutterCorp
+ public | aula_aluno_id_seq  | sequence | MutterCorp
+ public | aula_id_seq        | sequence | MutterCorp
+ public | curso              | table    | MutterCorp
+ public | curso_id_seq       | sequence | MutterCorp
+ public | cursos             | table    | MutterCorp
+ public | cursos_id_seq      | sequence | MutterCorp
+ public | professor          | table    | MutterCorp
+ public | professor_id_seq   | sequence | MutterCorp
+(13 rows)
+
