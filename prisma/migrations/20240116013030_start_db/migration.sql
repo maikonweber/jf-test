@@ -44,7 +44,7 @@ CREATE TABLE "aula_aluno" (
     "aulaId" INTEGER NOT NULL,
     "alunoId" INTEGER NOT NULL,
     "cursoId" INTEGER NOT NULL,
-    "progresso" INTEGER NOT NULL,
+    "progresso" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "aula_aluno_pkey" PRIMARY KEY ("id")
