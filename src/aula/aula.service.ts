@@ -59,29 +59,29 @@ export class AulaService {
         const aula = await prisma.aula.findFirst({
           where: { id: aula_id }
         });
-        const cursos = await prisma.curso_aluno.findFirst({
-          where: { id: aula.cursoId }
-        });
-        const create_aula_view = await prisma.aula_aluno.create({
+
+        const aula_view = await prisma.aula_aluno.findFirst({
+          where: {
+            aulaId: aula_id,
+          }
+        })
+
+        await prisma.aula_aluno.update({
+          where: { id: aula_view.id },
           data: {
-            aulaId: aula.id,
-            cursoId: cursos.id,
-            alunoId: aluno_id,
             progresso: "Visualizado"
           }
-        });
+        })
 
-        // Verify the last viewed class
-        const aulas_do_curso = await prisma.aula_aluno.findMany({
-          where: { cursoId: aula_id }
-        });
+
 
         const set_progresso = await prisma.curso_aluno.findFirstOrThrow({
           where: {
-            cursoId: cursos.id,
+            cursoId: aula.cursoId,
             alunoId: aluno_id
           }
         });
+
 
         if (set_progresso.status === "NaoIniciado") {
           const update = await prisma.curso_aluno.update({
@@ -94,9 +94,19 @@ export class AulaService {
           });
         }
 
+
+
+        const aulas_do_curso = await prisma.aula_aluno.findMany({
+          where: { cursoId: aula.cursoId }
+        });
+
+        this.logger.log(aulas_do_curso)
+
         const allClassesAttended = aulas_do_curso.every(
           (aula) => aula.progresso === "Visualizado"
         );
+
+        this.logger.log(allClassesAttended, "All Classes ")
 
         if (allClassesAttended) {
           const update = await prisma.curso_aluno.update({
@@ -108,11 +118,12 @@ export class AulaService {
             }
           });
         }
+        return "Aula Assistida"
       });
     } catch (error) {
       console.error("Error in watch_aula function:", error);
       // Handle the error as needed, e.g., throw, log, or handle it gracefully
-      throw new Error("Failed to watch the class.");
+      throw new Error("Erro na operação de assistir aula");
     }
   }
 
