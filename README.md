@@ -29,6 +29,7 @@ Um texto ou um arquivo (pdf, xlsx, docx, pptx) ou um link.
 
 [x] Um aluno não consegue ver os cursos, aulas, e nem dados de outros alunos. Apenas os próprios.
 
+** Antes de fornecer acesso ao curso 'e necessario criar as aulas primeramente
 
 ## Installation
 

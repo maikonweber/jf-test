@@ -15,7 +15,7 @@ export class AlunoController {
 
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Create a New Aluno' })
+  @ApiOperation({ summary: 'Cria um novo aluno' })
   @Post()
   create(@Body() createAlunoDto: CreateAlunoDto) {
     return this.alunoService.create(createAlunoDto);
@@ -23,7 +23,7 @@ export class AlunoController {
 
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Find all Alunos' })
+  @ApiOperation({ summary: 'Busca por todos aulas' })
   @Get()
   findAll() {
     return this.alunoService.findAll();
@@ -31,7 +31,7 @@ export class AlunoController {
 
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Find Aluno by Id' })
+  @ApiOperation({ summary: 'Busca por um aluno pelo seu id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.alunoService.findOne(+id);

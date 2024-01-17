@@ -13,7 +13,7 @@ export class AulaController {
   constructor(private readonly aulaService: AulaService) { }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a New Aula ' })
+  @ApiOperation({ summary: 'Cria uma nova aula' })
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
   @Post()
@@ -25,7 +25,7 @@ export class AulaController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Find all Aulas' })
+  @ApiOperation({ summary: 'Buscas todas aulas ** apenas visivel pelos professores' })
   @Get()
   findAll() {
     return this.aulaService.findAll();
@@ -33,8 +33,8 @@ export class AulaController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles("Professor, Aluno")
-  @ApiOperation({ summary: 'Find Aulas by Id ' })
+  @Roles("Professor")
+  @ApiOperation({ summary: 'Busca aula pelo id ** apenas visivel pelos professores' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.aulaService.findOne(+id);
@@ -43,7 +43,7 @@ export class AulaController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Update Aulas By Id' })
+  @ApiOperation({ summary: 'Update aulas pelo seu id ** apenas visivel pelos professores' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAulaDto: UpdateAulaDto) {
     return this.aulaService.update(+id, updateAulaDto);
@@ -52,7 +52,7 @@ export class AulaController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Delete Aulas By Id' })
+  @ApiOperation({ summary: 'Delete aulas pelo seu id ** apenas visivel pelos professores' })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.aulaService.remove(+id);
@@ -62,7 +62,7 @@ export class AulaController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Aluno")
-  @ApiOperation({ summary: 'Vizualizar Aula e Define o Status do Curso' })
+  @ApiOperation({ summary: 'Assistir aulas fornece status de visualizado - caso todas aulas forem visualizadas defino o curso com finalizado' })
   @Get('/watch_aula/:aula_id')
   WatchAula(@Request() req, @Param('aula_id') aula_id: string) {
     return this.aulaService.watch_aula(+aula_id, req.user.id)
