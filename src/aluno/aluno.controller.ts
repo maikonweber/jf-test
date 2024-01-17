@@ -39,7 +39,7 @@ export class AlunoController {
 
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Update Aluno By Id' })
+  @ApiOperation({ summary: 'Atualiza um aluno pelo seu id' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAlunoDto: UpdateAlunoDto) {
     return this.alunoService.update(+id, updateAlunoDto);
@@ -47,7 +47,7 @@ export class AlunoController {
 
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Delete Aluno by Id' })
+  @ApiOperation({ summary: 'Exclui um aluno pelo seu id' })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.alunoService.remove(+id);
