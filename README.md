@@ -31,6 +31,11 @@ Um texto ou um arquivo (pdf, xlsx, docx, pptx) ou um link.
 
 ** Antes de fornecer acesso ao curso 'e necessario criar as aulas primeramente
 
+Faça login com professor crie um curso e as aulas depois de o acesso ao alunos
+
+Usuario(Professor) : "gilbertosilva"
+usuario(Aluno) ; "maikonweber"
+ 
 ## Installation
 
 ```bash
