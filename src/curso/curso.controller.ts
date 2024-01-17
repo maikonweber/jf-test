@@ -16,7 +16,7 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Create a New Curso' })
+  @ApiOperation({ summary: 'Cria um novo curso' })
   @Post()
   create(@Body() createCursoDto: CreateCursoDto) {
     return this.cursoService.create(createCursoDto);
@@ -25,7 +25,7 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Find all Cursos ' })
+  @ApiOperation({ summary: 'Busca todos os cursos' })
   @Get('all')
   findAll() {
     return this.cursoService.findAll();
@@ -34,7 +34,7 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Find Curso by Id' })
+  @ApiOperation({ summary: 'Busca um curso pelo seu id **Apenas disponivel para professor' })
   @Get('findone/:curso_id')
   findOne(@Param('curso_id') id: string) {
     return this.cursoService.findOne(+id);
@@ -44,8 +44,8 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Aluno")
-  @ApiOperation({ summary: 'Lista todos curso e aulas que um aluno tem disponivel' })
-  @Get('findselfcourse/')
+  @ApiOperation({ summary: 'Lista todas informaçoes cursos do aluno(Cursos, Aulas, Progresso)' })
+  @Get('find_self_course/')
   findCursoAndAulasSelf(@Request() req, id: string) {
     return this.cursoService.findAllAulasByCourseAulo(req.user.id);
   }
@@ -54,7 +54,7 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Update Curso By Id' })
+  @ApiOperation({ summary: 'Atualiza um curso por id' })
   @Patch(':curso_id')
   update(@Param('curso_id') id: string, @Body() updateCursoDto: UpdateCursoDto) {
     return this.cursoService.update(+id, updateCursoDto);
@@ -64,7 +64,7 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Delete Curso By ID' })
+  @ApiOperation({ summary: 'Deleta um curso por id' })
   @Delete('curso_id')
   remove(@Param('curso_id') id: string) {
     return this.cursoService.remove(+id);
@@ -81,8 +81,8 @@ export class CursoController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles("Professor", "Aluno")
-  @ApiOperation({ summary: "Lista todas as Aulas deste Curso if Aluno Apenas se esta incrito" })
+  @Roles("Professor")
+  @ApiOperation({ summary: "Lista todas as Aulas deste Curso" })
   @Get("find_aulas_course/:curso_id")
   listAulasInCurso(@Param('curso_id') id: string) {
     return this.cursoService.findAllAulasCourse(+id)
@@ -91,7 +91,7 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: "Aprova um Aluno" })
+  @ApiOperation({ summary: "Aprova um Aluno ** Apenas se auno estiver finalizado em todas aulas" })
   @Patch("approve/:aluno_id:curso_id")
   ApproveAluno(@Param("aluno_id") aluno_id: string, @Param("curso_id") cursoId: string) {
     return this.cursoService.approveAluno(+aluno_id, +cursoId)
@@ -100,7 +100,7 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: "Da acesso ao um Curso" })
+  @ApiOperation({ summary: "Da acesso ao um Curso e Aulas para um aluno ** Necessario haver aulas criada no curso" })
   @Patch("giveaccess/:aluno_id:curso_id")
   GiveAccess(@Param("aluno_id") aluno_id: string, @Param("curso_id") cursoId: string) {
     return this.cursoService.giveAccess(+aluno_id, +cursoId)
@@ -109,7 +109,7 @@ export class CursoController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: "Remove Acesso ao Curso - ID - Aluno" })
+  @ApiOperation({ summary: "Remove Acesso ao Curso" })
   @Patch("removeacess/:aluno_id:curso_id")
   RemoveAcess(@Param('aluno_id') aluno_id: string, @Param('curso_id') cursoId: string) {
     return this.cursoService.updateStatus(+aluno_id, +cursoId, false)
