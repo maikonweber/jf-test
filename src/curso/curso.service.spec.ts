@@ -4,12 +4,12 @@ import { PrismaService } from 'prisma/PrismaService';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
 
-// Mock PrismaService
+
 const mockPrismaService = {
   curso: {
     create: jest.fn(),
     findMany: jest.fn(),
-    // ... mock other methods ...
+    
   },
   curso_aluno: {
     findMany: jest.fn(),
@@ -21,7 +21,7 @@ const mockPrismaService = {
   aula_aluno: {
     findMany: jest.fn(),
   },
-  // ... mock other services ...
+ 
 };
 
 describe('CursoService', () => {

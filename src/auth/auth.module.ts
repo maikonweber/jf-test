@@ -7,19 +7,19 @@ import { jwtConstants } from './JwtContants';
 import { AlunoService } from 'src/aluno/aluno.service';
 import { PrismaService } from 'prisma/PrismaService';
 import { JwtStrategy } from './Strategy/local.strategy';
+import { PrismaModule } from 'prisma/PrismaModule';
 
 @Module({
   imports: [
     JwtModule.register({
       privateKey: jwtConstants.secret,
       signOptions: { expiresIn: '5d' },
-    })
+    }), PrismaModule
   ],
   controllers: [AuthController],
   providers: [AuthService, 
     ProfessorService, 
     AlunoService,
-    PrismaService, 
     JwtStrategy],
 })
 export class AuthModule { }
