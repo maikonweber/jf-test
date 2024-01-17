@@ -36,7 +36,7 @@ export class CursoService {
   async findAllAulasByCourseAulo(id: number) {
     try {
       return this.prismaService.curso_aluno.findMany({
-        where: { alunoId: id },
+        where: { alunoId: id, ativo: true },
         include: {
           curso: {
             include: {
