@@ -36,6 +36,8 @@ Faça login com professor crie um curso e as aulas depois de o acesso ao alunos
 Usuario(Professor) : "gilbertosilva"
 usuario(Aluno) ; "maikonweber"
  
+**  Criado Teste no curso.service(Porem nao finalizado);
+
 ## Installation
 
 ```bash
