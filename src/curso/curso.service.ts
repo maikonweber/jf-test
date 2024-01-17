@@ -95,14 +95,22 @@ export class CursoService {
 
   async updateStatus(cursoId: number, alunoId: number, novoStatus: boolean) {
     try {
-      const id = await this.prismaService.curso_aluno.findFirstOrThrow({
+      await this.prismaService.$transaction(async (prisma) => {
+      const id = await prisma.curso_aluno.findFirstOrThrow({
         where: {
           cursoId,
           alunoId
         }
       });
 
-      const update = await this.prismaService.curso_aluno.update({
+      await prisma.aula_aluno.deleteMany({
+        where: {
+          alunoId: alunoId,
+          cursoId: cursoId
+        }
+      })
+
+      const update = await prisma.curso_aluno.update({
         where: {
           id: id.id
         },
@@ -110,8 +118,11 @@ export class CursoService {
           ativo: novoStatus
         }
       });
-
+      
       return update;
+    })
+
+     
     } catch (error) {
       this.logger.error(`Erro ao atualizar status: ${error.message}`);
       throw new InternalServerErrorException('Erro interno ao atualizar status');
