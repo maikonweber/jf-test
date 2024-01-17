@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CursoService } from './curso.service';
-import { PrismaService } from 'prisma/PrismaService';
+import { PrismaService } from '../../prisma/PrismaService';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
+import { InternalServerErrorException } from '@nestjs/common';
 
 
 const mockPrismaService = {
@@ -10,6 +11,10 @@ const mockPrismaService = {
     create: jest.fn(),
     findMany: jest.fn(),
     
+  },
+  $transaction: jest.fn(),
+  aula: {
+    findMany: jest.fn(),
   },
   curso_aluno: {
     findMany: jest.fn(),
@@ -20,6 +25,7 @@ const mockPrismaService = {
   },
   aula_aluno: {
     findMany: jest.fn(),
+    create: jest.fn(),
   },
  
 };

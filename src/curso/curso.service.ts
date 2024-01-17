@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
-import { PrismaService } from 'prisma/PrismaService';
+import { PrismaService } from '../../prisma/PrismaService';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Injectable()
