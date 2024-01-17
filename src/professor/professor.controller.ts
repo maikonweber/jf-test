@@ -14,8 +14,9 @@ export class ProfessorController {
   constructor(private readonly professorService: ProfessorService) { }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Create a New Professor' })
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("Professor")
+  @ApiOperation({ summary: 'Cria um novo professor' })
   @Post()
   create(@Body() createProfessorDto: CreateProfessorDto) {
     return this.professorService.create(createProfessorDto);
@@ -24,7 +25,7 @@ export class ProfessorController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Get All Professor' })
+  @ApiOperation({ summary: 'Lista todos professores' })
   @Get()
   createCurso(@Request() req) {
     console.log(req.user)
@@ -34,7 +35,7 @@ export class ProfessorController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Get Professor by id' })
+  @ApiOperation({ summary: 'Localiza um professor pelo seu id' })
   @Get(':id')
   findOne(@Request() req) {
     return this.professorService.findOne(req.user.id);
@@ -43,7 +44,7 @@ export class ProfessorController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Update Professor by Id' })
+  @ApiOperation({ summary: 'Atualiza um professor pelo seu id' })
   @Patch('')
   update(@Request() req, @Body() updateProfessorDto: UpdateProfessorDto) {
     return this.professorService.update(req.user.id, updateProfessorDto);
@@ -52,7 +53,7 @@ export class ProfessorController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles("Professor")
-  @ApiOperation({ summary: 'Get Delete Professor by Id' })
+  @ApiOperation({ summary: 'Deleta um professor pelo seu id' })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.professorService.remove(+id);
